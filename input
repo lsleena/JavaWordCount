@@ -1,0 +1,16 @@
+//Scala program using Aggreagate
+
+val keysWithValuesList = Array("foo=A", "foo=A", "foo=A", "foo=A", "foo=B", "bar=C", "bar=D", "bar=D")
+val data = sc.parallelize(keysWithValuesList)
+//Create key value pairs
+val kv = data.map(_.split("=")).map(v => (v(0), v(1))).cache()
+
+val initialCount = 0;
+val addToCounts = (n: Int, v: String) => n + 1
+val sumPartitionCounts = (p1: Int, p2: Int) => p1 + p2
+
+val countByKey = kv.aggregateByKey(initialCount)(addToCounts, sumPartitionCounts)
+
+val result = pairs.combineByKey((v) => (v, 1),(acc: (Int, Int), v) => (acc._1 + v, acc._2 + 1),(acc1: (Int, Int), acc2: (Int, Int)) => (acc1._1 + acc2._1, acc1._2 + acc2._2) ).map{ case (key, value) => (key, value._1 /value._2.toFloat) } result.collectAsMap().foreach(println(_))
+
+storeAddress = {(Store("Ritual"), "1026 Valencia St"), (Store("Philz"), "748 Van Ness Ave"), (Store("Philz"),"3101 24th St"), (Store("Starbucks"), "Seattle")}
